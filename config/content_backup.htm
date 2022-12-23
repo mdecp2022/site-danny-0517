@@ -24,7 +24,34 @@ for i in range(10):
     print(password_generator(4, pass_string))</pre>
 <h2>W6</h2>
 <h3>抽點程式</h3>
-<pre class="tw-data-text tw-text-large tw-ta" data-placeholder="翻譯" dir="ltr" id="tw-target-text"><a href="https://mdecp2022.github.io/site-danny-0517/content/Brython.html?src=https://gist.githubusercontent.com/mdecycu/2c6323eff49b496d1bafd210f3ec9707/raw/035d6948a233beceba7a7974eef0a0a4ef9c17e9/cp1b_2022_random_draw.py">snapshot</a></pre>
+<pre class="tw-data-text tw-text-large tw-ta" data-placeholder="翻譯" dir="ltr"><a href="https://mdecp2022.github.io/site-danny-0517/content/Brython.html?src=https://gist.githubusercontent.com/mdecycu/2c6323eff49b496d1bafd210f3ec9707/raw/035d6948a233beceba7a7974eef0a0a4ef9c17e9/cp1b_2022_random_draw.py">snapshot<br/></a></pre>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"># Python 的註解分為單行註解與多行, 單行註解可在字串前方放入 #
+'''多行註解則可以透過三個單引號前後標註字串或文字段落內容, 
+也可以使用三個雙引號作為多行註解的標註
+'''
+# 使用 import 導入 random 模組, 隨後就可以直接引用 random 模組的方法
+import random
+cp1b = "0761"
+# 宣告 url 變數值為字串, 此字串為取得 cp2022 1a 選課成員名單
+url = "https://nfu.cycu.org/?semester=1111&amp;courseno=" + cp1b + "&amp;column=True"
+# 利用上述已經宣告的 url 變數字串值, 作為 open() 函式的輸入變數, 可以連結至該網站
+# 連接 url 所代表字串的網站後, 再利用 read() 函式讀取該網站的內容, 即可取得 cp2022 1a 的選課成員學號
+# url 所屬的網站, 乃 69 中的一台虛擬主機 8/10ff-0-1-2, 並利用 Get 從教務主機取回課程註冊成員學號
+# 由於所取回的學號以跳行符號隔開, 因此取回的學號資料行, 再利用 split() 函式, 以 \n 跳行符號分割後
+# 所對應到 data 的資料型別將會是數列
+data = open(url).read().split("\n")
+# 經過檢查 data 數列, 發現最後一個 element 為空字串, 因此利用 [:-1] 去掉數列的最後一個元素, -1 代表數列最後一個元素的索引
+#print(data[:-1])
+# 設定一個變數, 與修課成員學號數列對應
+stud = data[:-1]
+# 使用 random 模組中的 shuffle() 函式, 以隨機的方式排列 stud 數列內容
+random.shuffle(stud)
+# 設定 num 與 5 對應, 或將 5 整數值存入 num 變數所對應的記憶體位址
+num = 5
+# 利用 for 重複迴圈與 range() 變數, 列印出 (利用 print() 函式) 已經隨機排列次序的 stud 數列的最前面 num 個學號值
+for i in range(num):
+    print(stud[i])</pre>
+<pre class="tw-data-text tw-text-large tw-ta" data-placeholder="翻譯" dir="ltr" id="tw-target-text"><a href="https://mdecp2022.github.io/site-danny-0517/content/Brython.html?src=https://gist.githubusercontent.com/mdecycu/2c6323eff49b496d1bafd210f3ec9707/raw/035d6948a233beceba7a7974eef0a0a4ef9c17e9/cp1b_2022_random_draw.py"><br/><br/></a></pre>
 <h2>w12</h2>
 <p>1.請問 w12 週小考有幾人缺考?<br/>A:1a有15個<br/>2.請問 w12 週小考平均分數多少?<br/>A:</p>
 <h2>W13</h2>
@@ -41,7 +68,74 @@ c=float(c)
 print(c, c*9/5 +32)</pre>
 <h3>問題</h3>
 <p>1.何謂 Brython 程式環境?<br/>A:<br/>2.如何編寫單位轉換程式?<br/>A:<br/>3.如何將在近端編寫的程式儲存至個人的 Gist 區域? 如何引用 Gist 程式?<br/>A:<br/>4.如何將近端的動態與靜態網站內容, 以 http 網路協定提交推送到 Github 雲端主機? (為什麼要將資料存在雲端?能不能直接在雲端上編寫 Brython 程式?然後將程式存)<br/>A:</p>
-<h2>w15</h2>
+<h2>w14</h2>
+<h3>出缺考人員名單</h3>
+<p><a href="https://mdecp2022.github.io/site-danny-0517/content/Brython.html?src=https://gist.githubusercontent.com/danny-0517/1fd4c4d49cc7e57e341a633039f2aac9/raw/a393bebe305ca04f39bc468cd0265818a3946da6/1a_score">1a_score</a></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"># 導入 ast 模組是希望利用其 literal_eval() 將 dict 格式的字串轉為 dict 資料型別
+# 以利隨後的取值運算
+import ast
+# 定義一個函式, 以班級代號字串作為輸入, 可以傳回各班修課學員的學號數列
+def get_stud(c_name):
+    # 將課程的班級代號字串作為 dict 的 key, 而 2022 fall 的課程代號作為對應值
+    # 使用者可以利用班級代號從 courses dict 取出課程代號
+    courses = {"1a": "0747", "1b": "0761", "2a": "0773", "2b": "0786"}
+    # 利用 c_name 從 courses 得到該學期的課程代號
+    c = courses[c_name]
+    # 利用課程代號從學校教務主機取的該班修課人員名單
+    url = "https://nfu.cycu.org/?semester=1111&amp;courseno=" + c + "&amp;column=True"
+    # 讀出各修課人員資料後, 以跳行符號切割, 得到的 data 為數列
+    data = open(url).read().split("\n")
+    # 因為最後一筆資料為空字串, 因此利用數列運算將其去除
+    stud = data[:-1]
+    # get_stud() 函式最後將對應班級的修課人員學號以數列格式傳回
+    return stud
+# 利用 "1b" 作為輸入從 get_stud() 取出該班修課學員學號數列
+cp_stud = get_stud("1a")
+# get w14 quiz result
+# # 以下為 1a w14 quiz 考試結果的 JSON 檔案
+cp_w14_quiz_url = "https://gist.githubusercontent.com/mdecycu/9df4b372ac1b7386cf259ced15f1a2b2/raw/a48d36ae883bde8efd07b25bfddaed8f13200353/2022_1209_cp_w14_1a_quiz.json"
+def get_score(url):
+    # 利用 open() 與 read() 讀取考試結果 JSON 檔案
+    json_data = open(url).read()
+    # 利用 ast.literal_eval() 將字串 dict, 轉為程式可用的 dict 資料型別
+    big_dict = ast.literal_eval(json_data)
+    # 從 big_dict 中, 取出 body 中的 testuser 欄位資料
+    data = big_dict["body"]["testuser"]
+    # 定義一個空 dict 資料變數, 隨後利用迴圈逐一將學號作為 key, 考試成績為 valude
+    # 組成 quiz_dict 的資料內容, 以便之後可以用學號當作輸入, 取得該員考試成績
+    quiz_dict = {}
+    for i in data:
+        # data 資料中的 user_name 為考試學員的帳號, 也就是學號
+        stud_id = data[i]["user_name"]
+        # data 資料中的 total_score 欄位為考試成績
+        # 因為考試成績為字串, 先轉為浮點數後, 再轉為整數
+        stud_score = int(float(data[i]["total_score"]))
+        # 逐一以學號為 key, 考試成績為對應 value, 將資料放入 quiz_dict
+        quiz_dict[stud_id] = stud_score
+    # 取得各學員的考試成績 quiz_dict 後, 將資料傳回
+    return quiz_dict
+# 從考試 JSON 檔案中取得考試結果的字典資料
+cp_quiz = get_score(cp_w14_quiz_url)
+# 設定一個空數列, 隨後將利用 append() 方法, 將缺考學員學號存入
+cp_abs = []
+# 從修課學員數列中, 逐一按照學號次序, 以重複迴圈將學號對應至 stud 變數
+for stud in cp_stud:
+    # 因為缺考學員在考試結果的 dict 中並無資料, 因此利用 try except 進行判斷
+    try:
+        # 針對 stud 學號, 有考試成績者, 列出其學號與得分
+        print(stud, cp_quiz[stud])
+    except:
+        # 缺考者沒有 quiz 成績, 則在其成績欄位印出"缺"
+        print(stud, "缺")
+        # 同時將缺考學員學號以 append() 方法逐一置入
+        cp_abs.append(stud)
+# 列出缺考名單
+print("="*20)
+print("以下為 w14 缺考名單:")
+# 因為 cp_abs 資料為 list, 在此利用 for 迴圈逐一列出
+for stud in cp_abs:
+    print(stud)</pre>
+<p></p><h2>w15</h2>
 <p>請試著回答下列問題?</p>
 <p>1.為何學習計算機程式需要建立個人倉儲?<br/>A:學習架設網站及匯集所有網站。<br/>2.全球資訊網能夠提供甚麼功能或有什麼優點?<br/>A:資訊時代發展的核心，是數十億人在網際網路上進行互動和瀏覽器的主要工具。<br/>3.Replit, stud.cycu.org 與 localhost 分別代表甚麼?<br/>A:維護個人倉儲的三種方法<br/>4.https, ssh 到底提供使用者那些功能或優點?<br/>A:其傳輸的資料是經過壓縮，所以可以加快傳輸速度。<br/>5.Brython 與 Python 有甚麼差別?<br/>A:Brython目的是可以用Python代替。<br/>6.能夠直接在瀏覽器中以 Brython 繪製中華民國國旗, 或模擬綠色方塊在方塊格點中任意移動, 代表甚麼?<br/>A:<br/>7.變數, 字串, 整數, 浮點數, 數列, Tuple, Dictionary, 函式, 重複迴圈, class, 物件導向, 資料庫, 這些名詞對您而言代表甚麼?<br/>A:寫程式的語法也是程式的邏輯基礎。</p>
 <h1>心得</h1>
